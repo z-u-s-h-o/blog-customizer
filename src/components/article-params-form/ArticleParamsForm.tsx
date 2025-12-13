@@ -15,7 +15,6 @@ import {
 	ArticleStateType,
 } from 'src/constants/articleProps';
 
-import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 
 type ArticleParamsFormProps = {
@@ -28,7 +27,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const { articlePageState, onStateChange, onReset } = props;
 
 	//Состояние сайдбара
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const sidebarRef = useRef<HTMLDivElement>(null);
 
 	//Локальное состояние для выбранных параметров (не влияет на articlePageState до нажатия "Применить")
@@ -37,20 +36,20 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	//Меняем состояние сайдбара при нажатии на «стрелку»
 	const handleToggle = () => {
-		setIsOpen(!isOpen);
+		setIsMenuOpen(!isMenuOpen);
 	};
 
 	// Обеспечиваем обработку клика вне элемента сайдбара для его скрытия
 	// + синхронизируем состояние формы статьи с текущими, примененными настройками
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isMenuOpen) return;
 
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
 				sidebarRef.current &&
 				!sidebarRef.current.contains(event.target as Node)
 			) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
 
@@ -58,7 +57,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 		setArticleFormState(articlePageState);
 
 		return () => document.removeEventListener('mousedown', handleClickOutside);
-	}, [isOpen]);
+	}, [isMenuOpen]);
 
 	// Обновляем локальное состояние при выборе опций
 	const handleOptionChange = (
@@ -85,21 +84,23 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 		});
 
 		onStateChange(changedFields);
-		setIsOpen(false);
+		setIsMenuOpen(false);
 	};
 
 	// При нажатии "Сбросить", выполняем переданную функцию и закрываем сайдбар
 	const handleReset = () => {
 		onReset();
-		setIsOpen(false);
+		setIsMenuOpen(false);
 	};
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={handleToggle} />
+			<ArrowButton isOpen={isMenuOpen} onClick={handleToggle} />
 			<aside
 				ref={sidebarRef}
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={`${styles.container} ${
+					isMenuOpen && styles.container_open
+				}`}>
 				<form className={styles.form} onSubmit={handleApply}>
 					<div className={styles.optionContainer}>
 						<Text size={31} weight={800} uppercase>
