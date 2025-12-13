@@ -6,7 +6,6 @@ import {
 	ArticleStateType,
 } from './constants/articleProps';
 import styles from './styles/index.module.scss';
-import clsx from 'clsx';
 
 export const App = () => {
 	const [articlePageState, setArticlePageState] =
@@ -25,7 +24,7 @@ export const App = () => {
 
 	return (
 		<main
-			className={clsx(styles.main)}
+			className={styles.main}
 			style={
 				{
 					'--font-family': articlePageState.fontFamilyOption.value,

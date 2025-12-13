@@ -16,6 +16,7 @@ import {
 } from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
+import clsx from 'clsx';
 
 type ArticleParamsFormProps = {
 	articlePageState: ArticleStateType;
@@ -98,9 +99,9 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 			<ArrowButton isOpen={isMenuOpen} onClick={handleToggle} />
 			<aside
 				ref={sidebarRef}
-				className={`${styles.container} ${
-					isMenuOpen && styles.container_open
-				}`}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isMenuOpen,
+				})}>
 				<form className={styles.form} onSubmit={handleApply}>
 					<div className={styles.optionContainer}>
 						<Text size={31} weight={800} uppercase>
